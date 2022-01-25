@@ -1,0 +1,153 @@
+<!-- Makes the base.html template a part of this UI.  -->
+{% extends 'partials/base.html' %} <br />
+
+<!-- adds this dynamic text as the title in base.html and is referenced as title -->
+{% block title %}Home{% endblock %}
+
+<!-- Add Django crispy forms to style forms -->
+{% load crispy_forms_tags %}
+
+<!-- dovetails this piece of the UI into the the base.html and is referenced as content -->
+{% block content %}
+<div class="row my-4">
+	<div class="col-md-8">
+		<div class="card shadow">
+			<div class="card-header">Statistics</div>
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-4">
+						<div class="card shadow">
+							<div class="card-body">
+								<p>
+									<i class="bi bi-list-stars text-primary"></i>
+									<span class="mx-1">Total Task</span>
+								</p>
+								<h5 class="text-center">
+									<!-- Dynamic render of data from database -->
+								</h5>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="card shadow">
+							<div class="card-body">
+								<p>
+									<i class="bi bi-check2-square text-success"></i>
+									<span class="mx-1">Completed Task</span>
+								</p>
+								<h5 class="text-center">
+									<!-- Dynamic render of data from database -->
+								</h5>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="card shadow">
+							<div class="card-body">
+								<p>
+									<i class="bi bi-x-octagon text-warning"></i>
+									<span class="mx-1">Uncompleted Task</span>
+								</p>
+								<h5 class="text-center">
+									<!-- Dynamic render of data from database -->
+								</h5>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div class="card shadow">
+			<div class="card-header">Task Form</div>
+			<div class="card-body">
+				<form class="d-grid" method="POST">
+					{% csrf_token %} {{ form|crispy }}
+					<input
+						class="btn btn-success btn-sm my-2"
+						type="submit"
+						value="Submit"
+					/>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row my-4">
+	<div class="col-md-6">
+		<div class="card shadow">
+			<div class="card-header">Graph</div>
+			<div class="card-body">
+				<div>
+					<canvas id="myChart"></canvas>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="list-group">
+			<div class="list-group-item">Task List</div>
+			<!-- Loop through database to render list -->
+			<div class="list-group-item">
+				<small class="text-muted">
+					<!-- Dynamic render of data from database -->
+				</small>
+				<div class="row">
+					<div class="col-md-8">
+						<!-- Check data is completed using if statement -->
+						<del
+							><p>
+								<!-- Dynamic render of data from database -->
+							</p>
+						</del>
+						<!-- Else -->
+						<p>
+							<!-- Dynamic render of data from database -->
+						</p>
+						<!-- End if -->
+					</div>
+					<div class="col-md-4">
+						<div>
+							<a class="btn btn-info btn-sm" href="">Edit</a>
+							<a class="btn btn-danger btn-sm" href="">Delete</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- End for loop  -->
+		</div>
+	</div>
+</div>
+<!--Chartjs-->
+<script>
+	const labels = ["Total", "Completed", "Uncompleted"];
+
+	const data = {
+		labels: labels,
+		datasets: [
+			{
+				label: "Task Graph",
+				backgroundColor: [
+					"rgb(255, 99, 132)",
+					"rgb(25, 99, 132)",
+					"rgb(55, 29, 132)",
+				],
+				borderColor: "rgb(255, 99, 132)",
+				data: [10, 6, 4],
+			},
+		],
+	};
+
+	const config = {
+		type: "bar",
+		data: data,
+		options: {},
+	};
+</script>
+<script>
+	const myChart = new Chart(document.getElementById("myChart"), config);
+</script>
+
+<!--End Chartjs-->
+{% endblock %}
